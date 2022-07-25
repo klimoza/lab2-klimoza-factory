@@ -5,11 +5,11 @@ use crate::*;
 // impl NonFungibleTokenEnumeration for Contract {
 #[near_bindgen]
 impl Contract {
-    fn nft_total_supply(&self) -> U128 {
+    pub fn nft_total_supply(&self) -> U128 {
         (self.tokens.owner_by_id.len() as u128).into()
     }
 
-    fn nft_tokens(&self, from_index: Option<U128>, limit: Option<u64>) -> Vec<JsonToken> {
+    pub fn nft_tokens(&self, from_index: Option<U128>, limit: Option<u64>) -> Vec<JsonToken> {
         let start_index: u128 = from_index.map(From::from).unwrap_or_default();
         require!(
             (self.tokens.owner_by_id.len() as u128) >= start_index,
@@ -26,7 +26,7 @@ impl Contract {
             .collect()
     }
 
-    fn nft_supply_for_owner(&self, account_id: AccountId) -> U128 {
+    pub fn nft_supply_for_owner(&self, account_id: AccountId) -> U128 {
         let tokens_per_owner = self.tokens.tokens_per_owner.as_ref().unwrap_or_else(|| {
             env::panic_str(
                 "Could not find tokens_per_owner when calling a method on the \
@@ -39,7 +39,7 @@ impl Contract {
             .unwrap_or(U128(0))
     }
 
-    fn nft_tokens_for_owner(
+    pub fn nft_tokens_for_owner(
         &self,
         account_id: AccountId,
         from_index: Option<U128>,

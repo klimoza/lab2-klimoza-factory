@@ -48,18 +48,22 @@ impl Contract {
         let approved_account_ids =
             if self.tokens.approvals_by_id.is_some() { Some(HashMap::new()) } else { None };
 
-        let (id, storage_usage) = initial_storage_usage;
-        refund_deposit_to_account(env::storage_usage() - storage_usage, id);
 
         // Return any extra attached deposit not used for storage
 
         let token = Token { token_id, owner_id, metadata: Some(token_metadata), approved_account_ids };
         NftMint { owner_id: &token.owner_id, token_ids: &[&token.token_id], memo: None }.emit();
+        if let Some(time) = expiration_period {
+            self.expiration_timestamp.insert(&token.token_id, &(env::block_timestamp() + parse_time(&time)));
+        }
+
+        let (id, storage_usage) = initial_storage_usage;
+        refund_deposit_to_account(env::storage_usage() - storage_usage, id);
         JsonToken { 
+          expiration_date: self.expiration_timestamp.get(&token.token_id),
           token_id: token.token_id, 
           owner_id: token.owner_id, 
           metadata: token.metadata, 
-          approved_account_ids: token.approved_account_ids, 
-          expiration_date: (expiration_period.map(|x| env::block_timestamp() + parse_time(&x))) }
+          approved_account_ids: token.approved_account_ids}
   }
 }

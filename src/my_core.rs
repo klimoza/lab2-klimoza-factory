@@ -7,7 +7,7 @@ use crate::*;
 #[near_bindgen]
 impl Contract {
     #[payable]
-    fn nft_transfer(
+    pub fn nft_transfer(
         &mut self,
         receiver_id: AccountId,
         token_id: TokenId,
@@ -18,7 +18,7 @@ impl Contract {
     }
 
     #[payable]
-    fn nft_transfer_call(
+    pub fn nft_transfer_call(
         &mut self,
         receiver_id: AccountId,
         token_id: TokenId,
@@ -29,7 +29,7 @@ impl Contract {
         self.tokens.nft_transfer_call(receiver_id, token_id, approval_id, memo, msg)
     }
 
-    fn nft_token(&self, token_id: TokenId) -> Option<JsonToken> {
+    pub fn nft_token(&self, token_id: TokenId) -> Option<JsonToken> {
         require!(self.token_is_not_expired(&token_id), "Token is expired");
         require!(self.tokens.owner_by_id.contains_key(&token_id), "Token doesn't exists");
         require!(self.tokens.owner_by_id.get(&token_id).unwrap() == env::predecessor_account_id() || self.tokens.owner_by_id.get(&token_id).unwrap() == env::current_account_id(), "Token metadata can be obtained only by the token owner");
