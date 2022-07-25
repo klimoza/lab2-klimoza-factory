@@ -30,9 +30,11 @@ impl Contract {
     }
 
     pub fn nft_token(&self, token_id: TokenId) -> Option<JsonToken> {
+        if !self.tokens.owner_by_id.contains_key(&token_id) {
+            return None;
+        }
         require!(self.token_is_not_expired(&token_id), "Token is expired");
-        require!(self.tokens.owner_by_id.contains_key(&token_id), "Token doesn't exists");
-        require!(self.tokens.owner_by_id.get(&token_id).unwrap() == env::predecessor_account_id() || self.tokens.owner_by_id.get(&token_id).unwrap() == env::current_account_id(), "Token metadata can be obtained only by the token owner");
+        require!(self.tokens.owner_by_id.get(&token_id).unwrap() == env::predecessor_account_id() || env::predecessor_account_id() == env::current_account_id(), "Token metadata can be obtained only by the token owner");
         self.tokens.nft_token(token_id).map(|token| 
           JsonToken {
             expiration_date: self.expiration_timestamp.get(&token.token_id),

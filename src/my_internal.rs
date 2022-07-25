@@ -20,7 +20,7 @@ pub(crate) fn parse_time(time: &String) -> u64 {
 impl Contract {
     pub(crate) fn token_is_not_expired(&self, token_id: &TokenId) -> bool {
         let timestamp = self.expiration_timestamp.get(&token_id);
-        timestamp.is_none() || timestamp.unwrap() <= env::block_timestamp()
+        timestamp.is_none() || timestamp.unwrap() >= env::block_timestamp()
     }
 
     pub(crate) fn enum_get_token(&self, owner_id: AccountId, token_id: TokenId) -> JsonToken {
