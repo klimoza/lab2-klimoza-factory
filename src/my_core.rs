@@ -46,7 +46,7 @@ impl Contract {
         {
             self.tokens.nft_token(token_id).map(|token| JsonToken {
                 expiration_date: self.expiration_timestamp.get(&token.token_id),
-                royalty: self.royalty.get(&token.token_id),
+                royalty: self.royalty.get(&token.token_id).unwrap(),
                 token_id: token.token_id,
                 owner_id: token.owner_id,
                 metadata: token.metadata,
@@ -55,7 +55,7 @@ impl Contract {
         } else {
             self.tokens.nft_token(token_id).map(|token| JsonToken {
                 expiration_date: self.expiration_timestamp.get(&token.token_id),
-                royalty: self.royalty.get(&token.token_id),
+                royalty: self.royalty.get(&token.token_id).unwrap(),
                 token_id: token.token_id,
                 owner_id: token.owner_id,
                 metadata: None,

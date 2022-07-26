@@ -46,7 +46,7 @@ impl Contract {
                 .unwrap_or_default(),
         );
         let expiration_date = self.expiration_timestamp.get(&token_id).map(|x| x as u64);
-        let royalty = self.royalty.get(&token_id);
+        let royalty = self.royalty.get(&token_id).unwrap();
         JsonToken {
             token_id,
             owner_id,

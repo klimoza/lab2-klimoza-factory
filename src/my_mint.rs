@@ -40,9 +40,8 @@ impl Contract {
             for (account, amount) in perpetual_royalties {
                 royalty.insert(account, amount);
             }
-
-            self.royalty.insert(&token_id, &royalty);
         }
+        self.royalty.insert(&token_id, &royalty);
 
         let owner_id: AccountId = receiver_id;
 
@@ -100,7 +99,7 @@ impl Contract {
         refund_deposit_to_account(env::storage_usage() - storage_usage, id);
         JsonToken {
             expiration_date: self.expiration_timestamp.get(&token.token_id),
-            royalty: self.royalty.get(&token.token_id),
+            royalty: royalty,
             token_id: token.token_id,
             owner_id: token.owner_id,
             metadata: token.metadata,
