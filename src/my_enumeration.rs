@@ -1,4 +1,4 @@
-use near_sdk::{near_bindgen, json_types::U128, require};
+use near_sdk::{json_types::U128, near_bindgen, require};
 
 use crate::*;
 
@@ -13,7 +13,8 @@ impl Contract {
         );
         let limit = limit.map(|v| v as usize).unwrap_or(usize::MAX);
         require!(limit != 0, "Cannot provide limit of 0.");
-        self.tokens.owner_by_id
+        self.tokens
+            .owner_by_id
             .iter()
             .filter(|(token_id, _)| self.token_is_not_expired(token_id))
             .skip(start_index as usize)

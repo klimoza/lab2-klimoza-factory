@@ -1,4 +1,6 @@
-use near_contract_standards::non_fungible_token::{core::NonFungibleTokenResolver, metadata::NonFungibleTokenMetadataProvider};
+use near_contract_standards::non_fungible_token::{
+    core::NonFungibleTokenResolver, metadata::NonFungibleTokenMetadataProvider,
+};
 use near_sdk::near_bindgen;
 
 use crate::*;
